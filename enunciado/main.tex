@@ -1,13 +1,13 @@
-\documentclass{upmassignment}
-\usepackage[spanish]{babel}
-\usepackage{ifthen}
-\usepackage{amsmath}
-\usepackage{amsfonts}
-\usepackage{booktabs}
+\documentclass{upmassignment} \usepackage[spanish]{babel} \usepackage{ifthen} \usepackage{amsmath} \usepackage{amsfonts} \usepackage{booktabs}
+\usepackage{fancyvrb}
+\usepackage{tikz}
 \usepackage[x11names]{xcolor}
-\usepackage{tcolorbox}
-\usepackage{cclicenses}
-\usepackage{url}
+\usepackage{enumitem}
+\usepackage{comment}
+\usepackage[top=0.5in, joeft=0.9in]{geometry}
+\usepackage{longtable}
+%\usepackage{fontspec}
+\usepackage{subcaption}
 
 \usepackage{listings}
 \lstset{basicstyle=\ttfamily,
@@ -16,8 +16,6 @@
   keywordstyle=\color{blue},
   backgroundcolor=\color{gray!30},
 }
-
-
 \usetikzlibrary{calc}
 
 
@@ -37,19 +35,17 @@
 
 
 
-\coursetitle{Redes y Servicios}
-\courselabel{RSER}
-\exercisesheet{Integración}{}
-\student{\ }%
-\semester{Primer Semestre 2024/2025}
+\courselabel{Redes y Servicios}
+
+%\exercisesheet{\textbf{Redes y Servicios de Comunicaciones}}{\textbf{PROBLEMAS TEMA 3}}
+\exercisesheet{\textbf{Redes y Servicios}}{\textbf{Mini-reto: integración}}
+
+\semester{2026/2027}
 \date{\today}
-\university{Universidad Politécnica de Madrid}
-\school{Departamento de Ingeniería de Sistemas Telemáticos}
-%\usepackage[pdftex]{graphicx}
-%\usepackage{subfigure}
+\coursetitle{Redes y Servicios}
 
 
-\setlength{\textwidth}{5.0in}
+\setlength{\textwidth}{6.0in}
 \linespread{1.3}
 \renewcommand{\PB}{{\bfseries Problema}}
 
@@ -59,15 +55,48 @@
 
 
 
-\section*{Introducción}
+\section*{Pregunta Esencial}
 
-En esta práctica\footnote{Este material está protegido por la
+\emph{¿Cómo podemos implementar un sistema completo de monitorización remota que permita al hospital RAID-BIO mejorar la atención y el bienestar de sus pacientes?}.
+
+Los hospitales requieren sistemas de monitorización remota que permitan procesar y analizar en tiempo real los datos biométricos de los pacientes. Estos sistemas son complejos y están compuestos por diversos subsistemas: dispositivos IoT que registran los datos de los pacientes, redes de comunicación que los transmiten, sistemas de procesamiento y generación de alertas y herramientas de visualización de los datos y alertas.
+
+Cada vez es más habitual que esta tecnología se integre en la red hospitalaria. Por ejemplo, en Valdebebas, un hospital está incorporando tecnologías para la monitorización remota de pacientes\footnote{https://cadenaser.com/cmadrid/2025/06/24/tecnologia-avanzada-y-humanizacion-de-la-hospitalizacion-asi-seran-las-habitaciones-del-hospital-blua-sanitas-valdebebas-radio-madrid/}
+. En consecuencia, el mercado está demandando cada vez más profesionales especializados en estas tecnologías. 
+
+\begin{figure}[b!]
+    \centering
+    % --- Primera subfigura ---
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{enunciado/figs/paciente.jpg}
+        \label{fig:health-monitoring}
+    \end{subfigure}
+    \hfill
+    % --- Segunda subfigura ---
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{enunciado/figs/paciente2.jpg}
+        \label{fig:alert-system}
+    \end{subfigure}
+    \label{fig:monitoring-alerts}
+    \caption{Las imagenes son de uso libre y se han obtenido de www.pexels.com
+.}
+\end{figure}
+
+Aunque estos sistemas son complejos, los beneficios para la calidad médica son claros. Por ejemplo, en Pittsburgh, un estudio\footnote{https://pmc.ncbi.nlm.nih.gov/articles/PMC10978114} demostró que la monitorización remota se asocia con una disminución de la mortalidad en pacientes con insuficiencia cardíaca.
+
+
+
+\section*{Descripción}
+
+El reto\footnote{Este material está protegido por la
 licencia
 CC BY-NC-SA 4.0.
 \byncsa
-} se integrarán
-todas las componentes MQTT en el
-siguiente escenario de red:
+} consiste en proporcionar al hospital RAID-BIO un sistema de monitorización remota completo que le ayude a mejorar la asistencia a sus pacientes, permitiéndole anticiparse a posibles problemas de salud. 
+
+Para ello, deberá integrar todos los subsistemas que ha desarrollado en prácticas y retos anteriores para crear un prototipo del sistema de monitorización completo, que pueda servir como proyecto piloto de implementación. La red sobre la que se transmitirán los datos de los pacientes se representa en la siguiente figura: 
 
 \begin{figure}[h]
     \centering
@@ -188,20 +217,26 @@ siguiente escenario de red:
 
 
 
-\section*{Lanzar escenario}
-En primer lugar debe arrancar la máquina
-virtual utilizada en el curso.
-Sírvase del comando de sesiones
-anteriores.
-Todas las indicaciones de ahora
-en adelante asumen que está dentro
+\section*{Objetivos}
+El objetivo general del reto es crear un prototipo del sistema de monitorización remota. Para ello, deberá: 
+\begin{itemize}
+    \item utilizar el cliente MQTT que desarrolló en la Práctica 1.
+    \item utilizar Grafana para visualizar los datos de los pacientes, tal y cómo hizo en la Práctica 2.  
+    \item configurar la red IP del escenario  que se ha mostrado en la descripción de este reto, aplicando lo aprendido en la Práctica 3.
+    \item utilizar el suscriptor MQTT y el sistema de generación de alertas que ha desarrollado en el nano-reto anterior.
+\end{itemize}
+
+
+    \section*{Actividades guiadas}
+A continuación se presentan las actividades mini-reto:
+
+
+\begin{enumerate}[label=\textbf{Actividad {{\arabic*}}}]
+    \item \textbf{Despliegue del escenario}: En primer lugar debe arrancar la máquina
+virtual utilizada en el curso. Sírvase del comando de sesiones anteriores. Todas las indicaciones de ahora en adelante asumen que está dentro
 de la máquina virtual.
 
-Descargue en la misma carpeta los ficheros
-\texttt{install.sh} y
-\texttt{vnx-integracion.xml}.
-A continuación abra una terminal
-y ejecute
+Descargue los ficheros \texttt{install.sh} y \texttt{vnx-integracion.xml} que están disponibles en el Moodle de la asignatura. Por defecto se almancenarán en la carpeta \texttt{Downloads} de su máquina virtual. A continuación, abra una terminal y ejecute:
 \begin{lstlisting}[language=bash]
 $ cd ~/Downloads
 $ sudo ./install.sh
@@ -212,12 +247,7 @@ ficheros en la carpeta
 Espere unos 5\,\textrm{min} para que
 termine de desplegarse todo el escenario.
 
-
-
-\section*{Configuración de red}
-\subsection*{Plan de direccionamiento IP}
-En este apartado tendrá que configurar
-las direcciones IP de las interfaces:
+\item \textbf{Configuración de red.}  Configure las direcciones IP de las interfaces: 
 h2.\texttt{eth1},
 r1.\texttt{eth1},
 r1.\texttt{eth2},
@@ -246,7 +276,7 @@ hay en cada subred.
 Para ello acceda a la consola del
 dispositivo
 (login: root, password: xxxx)
-y ejecute
+y ejecute:
 \begin{lstlisting}[language=bash]
 $ ip address add IP/PREF dev IF
 \end{lstlisting}
@@ -257,29 +287,21 @@ y \texttt{PREF} es la longitud del prefijo.
 \emph{Nota}: la red Net3 interconecta
 su host (la máquina virtual)
 con el router virtual r1.
-Esta red ya viene configurada.
+Esta red ya viene configurada, es decir, las interfaces eth3 de r1 y Net3-e00 del host ya tienen dirección IP.
 
 
-\subsection*{Reenvío IP}
-En este apartado debe configurar las
-tablas de direccionamiento de los
-equipos h2,h3,r1 y r2.
-Debe configurar el direccionamiento
-para que tenga \texttt{ping}
-entre todos los dispositivos del escenario.
+\item \textbf{Configuración del reenvío IP}. En este apartado debe configurar las tablas de encaminamiento de los equipos \texttt{h2,h3,r1 y r2} para que haya conectividad entre todos los dispositivos del escenario. Para añadir una entrada en la tabla de encaminamiento de un nodo utilice el siguiente comando:
 
-Para ello utilice el siguiente comando
-en cada una de las terminales de los equipos
+
+
 \begin{lstlisting}[language=bash]
 $ ip route add SUBNET via NEXTHOP
 \end{lstlisting}
-Con este comando especifica que para
+Este comando especifica que para
 llegar a la subred \texttt{SUBNET}
-(por ejemplo, 10.1.0.0/24)
-tiene que enviar el tráfico al
-siguiente salto \texttt{NEXTHOP}
-(por ejemplo, 10.1.0.2).
+(por ejemplo, 10.1.0.0/24), hay que enviar el tráfico al siguiente salto \texttt{NEXTHOP} (por ejemplo, 10.1.0.2).
 
+Cuando haya programado las tablas de encaminamiento de los nodos del escenario, haga pruebas con el comando \texttt{ping} para verificar la conectividad. 
 
 \emph{Nota}: recuerde que el broker
 EMQX se ejecuta como un contenedor
@@ -291,50 +313,7 @@ los equipos del escenario para poder
 alcanzar el dicha subred.
 
 
-
-
-
-
-
-\section*{Servicio de Detección de
-Anomalías}
-Una vez tenga configurado el escenario
-de red, tiene que arrancar el servicio
-de detección de anomalías que ha
-desarrollado.
-
-En concreto, tiene que ejecutar:
-\begin{itemize}
-    \item el \texttt{client.py}
-        (sirviéndose del
-        \texttt{utils.py} y
-        \texttt{reporter.sh})
-        en
-        el h2;
-    \item el \texttt{subs.py}
-        en el h3; y
-    \item el broker EMQX, grafana,
-        y el datasource en el
-        host (la máquina virtual).
-\end{itemize}
-
-\emph{Nota}: todos los archivos que
-tenga en la carpeta
-\texttt{/home/upm/shared}
-de su máquina virtual están
-accesibles en la carpeta
-\texttt{/shared} de cada componente
-del escenario.
-Se recomienda tener todos los scripts
-en la carpeta
-\texttt{/home/upm/shared} para
-facilitarle la edición y ejecución
-en cada componente.
-
-
-\subsection*{Arrancar broker EMQX, datasource
-y Grafana}
-Lo primero que va a realizar es
+\item \textbf{Arrancar broker EMQX, datasource y Grafana}. Para arrancar el servicio de detección de anomalías, primero debe
 arrancar el contenedor del broker EMQX
 y Grafana (junto al plugin del datasource).
 Para ello, acceda al host (la máquina
@@ -363,69 +342,73 @@ al broker EMQX.
 Puede ver la dirección IP del broker
 EMQX usando el siguiente comando:
 \begin{lstlisting}[language=bash]
-$ docker inspect `docker ps | grep 5.0.2\
-  | cut -d' ' -f1 ` | grep "IPAddress"
+$ sudo docker inspect  \ 
+  $(sudo docker ps | grep 5.0.2 | cut -d ' ' -f1) \ 
+  | grep "IPAddress"
 \end{lstlisting}
 
+\item \textbf{Arrancar el cliente de MQTT}. Para arrancar este servicio, primero ejecute \texttt{client.py} (sirviéndose del \texttt{utils.py} y
+        \texttt{reporter.sh}) en h2. Nota: deberá modificar la variable \texttt{broker} de su script. 
 
+Si la conexión se establece con éxito podrá comprobar que el tráfico MQTT llega al docker que ejecuta el broker EMQX. Para hacer esta comprobación, ejecute en un terminal de la máquina virtual el comando:
 
-\subsection*{Arrancar el cliente}
-Una vez haya comprobado que hay
-conexión entre todos los equipos
-vamos a comenzar a generar métricas en h2
-con el \texttt{reporter.sh}.
-Para ello ejecute el siguiente comando
-en la terminal
 \begin{lstlisting}[language=bash]
-$ sudo lxc-attach h2 -- cd /shared/DIR; ./reporter.sh
+$ sudo docker exec -it emqx /bin/sh
 \end{lstlisting}
-donde \texttt{DIR} es la carpeta donde
-se encuentran todos sus archivos.
-Esto comenzará a generar el
-\texttt{report.csv} en la carpeta 
-correspondiente.
 
-Acto seguido, vamos a ejecutar nuestro
-\texttt{client.py}. Acceda a la terminal
-h2 y ejecute el cliente actualizando
-la dirección IP del broker.
-Si la configuración de red es correcta,
-debería ver cómo el broker va recibiendo
-mensajes.
+Este comando le permitirá acceder a la consola del docker que ejecuta el broker. En la consola del docker, ejecute el siguiente comando: 
 
-\emph{Note}: compruebe que los
-\texttt{PUBLISH} envían un JSON con
-las métricas de cada línea de reporte.
+\begin{lstlisting}[language=bash]
+$ emqx ctl log handlers set-level console debug
+\end{lstlisting}
 
+Este comando le permitirá configurar el fichero de log del broker. 
 
-\subsection*{Visualización de métricas}
-En la máquina virtual, acceda a grafana
-y siga los pasos de prácticas anteriores
+A continuación, en un terminal de la máquina virtual, ejecute el comando:
+
+\begin{lstlisting}[language=bash]
+$ sudo docker logs -f emqx
+\end{lstlisting}
+
+Este comando le mostrara los mensajes MQTT que está recibiendo el broker de MQTT.
+
+\emph{Nota}: todos los archivos que tenga en la carpeta
+\texttt{/home/upm/shared} de su máquina virtual están accesibles en la carpeta
+\texttt{/shared} de los nodos del escenario (\texttt{h2,h3,r1,r2}). Cualquier cambio que haga en cualquiera de estos dos directorios se aplica en ambos. 
+
+\item \textbf{Visualización de métricas}
+
+En la máquina virtual, acceda a grafana y siga los pasos de prácticas anteriores
 para visualizar cómo va evolucionando
 la temperatura.
 
 
-\subsection*{Arrancar el
-suscriptor/detector de anomalías}
-El programa \texttt{subs.py} lo vamos
-a ejecutar en la consola de h3.
-Para ello, acceda a la carpeta
-\texttt{/shared/DIR} y ejecute el
-script. Recuerde que la dirección IP del
-broker debe corresponder con la del
-contenedor corriendo en el escenario.
+%Con el cliente MQTT ya conectado al broker, arranque el subscriptor \texttt{subs.py} en el h3.
 
-Si la configuración de red es correcta,
-debería recibir \texttt{PUBLISH}
-desde el broker y en pantalla deberían
-mostrarse las alertas de su script.
+\item \textbf{Arrancar el suscriptor/detector de anomalías}. Para finalizar, vamos a ejecutar el programa \texttt{subs.py} en la consola de h3. Recuerde que la dirección IP del broker debe corresponder con la del contenedor corriendo en el escenario. 
+
+Si la configuración de red es correcta, debería recibir \texttt{PUBLISH}
+desde el broker y ver en las capturas de wireshark las alertas que genera su detector de anomalías.
+
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 \section*{Evaluación}
 La evaluación de la integración
 se llevará a cabo por medio de un examen
-práctico en el que todas las personas del
+oral en el que todas las personas del
 grupo deben demostrar que:
 \begin{itemize}
     \item saben configurar direcciones IP;
@@ -453,10 +436,7 @@ grupo deben demostrar que:
 
 
 \begin{tcolorbox}
-    \textbf{Atención I}: se recomienda,
-    a modo de ensayo, que cada componente
-    sea capaz de realizar la integración
-    por si misma.
+
 
     \textbf{Atención II}: se recomienda,
     a modo de ensayo, realizar capturas
